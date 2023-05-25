@@ -91,28 +91,31 @@ export default {
   data(){
     return{
       tableData1:[
-        {
-          id: 1,
-          username: 'Tom'
-        },
       ],
       tableData2:[
-        {
-          id: 1,
-          username: 'Tom'
-        },
-      ],
+       ],
       form:{
       }
     }
   },
+
+  // created() {
+  //   this.load()
+  // },
   methods: {
     jumptouser() {
-      this.$router.push({path:'/user'})
+      this.$router.push({path: '/user'})
     },
-    query(){
-      request.post("/user",this.form).then(res=>{
+    query() {
+      request.post("/user", this.form).then(res => {
         console.log(res)
+      })
+    },
+
+    load() {
+      request.get("api/user/getAll").then(res => {
+        this.tableData1 = res.data.records
+        this.tableData2 = res.data.records
       })
     }
   }

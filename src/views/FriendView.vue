@@ -6,22 +6,60 @@
     <el-table-column prop="id" label="ID" />
     <el-table-column prop="username" label="username" />
   </el-table>
+  <div style="margin: 10px 0">
+    <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+    </el-pagination>
+  </div>
 </template>
 
 
 
 
 <script>
+import request from "@/utils/request";
+
 export default {
   name: "FriendView",
   data() {
     return {
+      search: '',
+      currentPage: 1,
+      pageSize: 10,
+      total: 0,
       tableData: [
-        {
-          id: 1,
-          username: 'Tom'
-        },
       ]
+    }
+  },
+  // created() {
+  //   this.load()
+  // },
+  methods:{
+    load(){
+      request.get("api/user/getAll", {
+        params: {
+          pageNum: this.currentPage,
+          pageSize: this.pageSize,
+          search: this.search
+        }
+      }).then(res => {
+        this.tableData = res.data.records
+        this.total = res.data.total
+      })
+    },
+    handleSizeChange(pageSize) {   // 改变当前每页的个数触发
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {  // 改变当前页码触发
+      this.currentPage = pageNum
+      this.load()
     }
   }
 }
