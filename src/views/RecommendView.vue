@@ -37,8 +37,13 @@
   <el-form :model="form" label-width="120px">
     <el-form-item label="Activity zone">
       <el-select v-model="form.region" placeholder="please select your zone">
-        <el-option label="Zone one" value="shanghai" />
-        <el-option label="Zone two" value="beijing" />
+        <el-option label="Asia" value="Asia" />
+        <el-option label="Europe" value="Europe" />
+        <el-option label="North America" value="North America" />
+        <el-option label="South America" value="South America" />
+        <el-option label="Africa" value="Africa" />
+        <el-option label="Oceania" value="Oceania"/>
+        <el-option label="Antarctica" value="Antarctica"/>
       </el-select>
     </el-form-item>
     <el-form-item label="Resources">
