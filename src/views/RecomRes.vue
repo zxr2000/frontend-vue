@@ -44,6 +44,7 @@ export default {
     }
   },
   mounted() {
+    this.updateUsername()
     axios.get('backend-api-url')
         .then(response => {
           this.items = response.data.items
@@ -53,6 +54,16 @@ export default {
         })
   },
   methods: {
+    updateUsername() {
+      // 通过请求获取当前已登录用户的用户名，更新username
+      // 例如，从后端API获取当前已登录用户的用户名
+      axios.get('/api/user').then(response => {
+        this.myusername = response.data.username
+      }).catch(() => {
+        // 如果没有登录或者请求失败，清空用户名
+        this.myusername = ''
+      })
+    },
     jumpback() {
       this.$router.push({path: '/user/recom'})
     },

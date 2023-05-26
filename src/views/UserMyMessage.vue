@@ -14,16 +14,18 @@
     <el-table :data="tableData" stripe style="width:400px">
       <el-table-column prop="username" width="180"/>
       <el-table-column>
-        <el-button type="success" plain @click="accept">同意</el-button>
+        <el-button type="success" plain @click="accept(row)">同意</el-button>
       </el-table-column>
       <el-table-column>
-        <el-button type="info" plain @click="refuse">拒绝</el-button>
+        <el-button type="info" plain @click="refuse(row)">拒绝</el-button>
       </el-table-column>
     </el-table>
   </div>
 </template>
 
 <script>
+
+import axios from "axios";
 
 export default {
   name: "UserMyMessage",
@@ -43,18 +45,43 @@ export default {
         {
           username: 'Timmy',
         },
-      ]
+      ],
+      selectedRequest: null,
     }
   },
+  // created() {
+  //   axios.get('/api/friend/requests').then((response) => {
+  //     this.tableData = response.data;
+  //   });
+  // },
   methods: {
+    updateUsername() {
+      // 通过请求获取当前已登录用户的用户名，更新username
+      // 例如，从后端API获取当前已登录用户的用户名
+      axios.get('/api/user').then(response => {
+        this.myusername = response.data.username
+      }).catch(() => {
+        // 如果没有登录或者请求失败，清空用户名
+        this.myusername = ''
+      })
+    },
     jumpback() {
       this.$router.push({path:'/user/my'})
     },
-    accept(){
+    accept(row){
+      axios.put(`/api/friend/requests/${row.id}`, { status: 'accepted' }).then((response) => {
+        row.status = response.data.status;
+      });
     },
-    refuse(){
+    refuse(row){
+      axios.put(`/api/friend/requests/${row.id}`, { status: 'refused' }).then((response) => {
+        row.status = response.data.status;
+      });
     }
-  }
+  },
+  mounted() {
+    this.updateUsername()
+  },
 }
 </script>
 

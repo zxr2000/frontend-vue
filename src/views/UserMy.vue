@@ -22,7 +22,7 @@
     <el-row>
       <el-col :span="4" v-for="(o, index) in 3" :key="o" :offset="3">
         <el-card :body-style="{ padding: '0px' }">
-          <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
+          <img src="imageUrl" class="image">
           <div style="padding: 10px;">
             <span>{{movieName}}</span>
             <div class="bottom clearfix">
@@ -42,6 +42,7 @@
 
 <script>
 import { ArrowLeft,ArrowRight } from "@element-plus/icons";
+import axios from "axios";
 export default {
   name: "UserMy",
   setup() {
@@ -54,11 +55,22 @@ export default {
     return {
       username: '用户名',
       movieName:'电影名',
+      imgUrl:'',
       currentPage:1,
       pageSum:10
     }
   },
   methods: {
+    updateUsername() {
+      // 通过请求获取当前已登录用户的用户名，更新username
+      // 例如，从后端API获取当前已登录用户的用户名
+      axios.get('/api/user').then(response => {
+        this.username = response.data.username
+      }).catch(() => {
+        // 如果没有登录或者请求失败，清空用户名
+        this.username = ''
+      })
+    },
     jumptofriend() {
       this.$router.push({path:'/user/my/friend'})
     },
@@ -74,6 +86,26 @@ export default {
     previouspage(){
     },
     nextpage(){
+    }
+  },
+  mounted() {
+    this.updateUsername()
+  },
+  created() {
+    // 使用axios库，调用后端接口，从数据库中读取电影名及对应的图片url
+    // 并将其保存到data属性中
+    axios.get('/api/movies/1').then((response) => {
+      const data = response.data;
+      this.movieName = data.movieName;
+      this.imgUrl = data.imgUrl;
+    }).catch((err) => {
+      console.error('failed to fetch movie data:', err);
+    });
+  },
+  computed: {
+    imageUrl() {
+      // 返回一个由电影名所确定的图片的url
+      return `https://example.com/images/${this.imgUrl}`;
     }
   }
 }

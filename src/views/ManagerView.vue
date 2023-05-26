@@ -81,10 +81,10 @@
 
 <script>
 import jsCookie from 'js-cookie';
-//import {request} from "axios";
 import axios from "axios";
+//import {request} from "axios";
 import E from 'wangeditor'
-import request from "@/utils/request";
+//import request from "@/utils/request";
 let user
 
 export default {
@@ -117,7 +117,7 @@ export default {
     },
 
     load() {
-      request.get("api/user/getAll", {
+      axios.get("api/user/getAll", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
@@ -157,7 +157,7 @@ export default {
       this.form.content = user.txt.html()  // 获取 编辑器里面的值，然后赋予到实体当中
 
       if (this.form.id) {  // 更新
-        request.put("api/user/create", this.form).then(res => {
+        axios.put("api/user/create", this.form).then(res => {
           console.log(res)
           if (res.code === '0') {
             this.$message({
@@ -178,7 +178,7 @@ export default {
         let user = JSON.parse(userStr)
         this.form.username= user.username
 
-        request.post("/news", this.form).then(res => {
+        axios.post("/news", this.form).then(res => {
           console.log(res)
           if (res.code === '0') {
             this.$message({
@@ -200,7 +200,7 @@ export default {
     },
     Delete(id) {
       console.log(id)
-      request.delete("api/user/delete" + id).then(res => {
+      axios.delete("api/user/delete" + id).then(res => {
         if (res.code === '0') {
           this.$message({
             type: "success",

@@ -18,7 +18,7 @@
 
 <script>
 
-import axios from "core-js/internals/queue";
+import axios from "axios";
 
 export default {
   name: "UserMyFriend",
@@ -30,6 +30,16 @@ export default {
     }
   },
   methods: {
+    updateUsername() {
+      // 通过请求获取当前已登录用户的用户名，更新username
+      // 例如，从后端API获取当前已登录用户的用户名
+      axios.get('/api/user').then(response => {
+        this.myusername = response.data.username
+      }).catch(() => {
+        // 如果没有登录或者请求失败，清空用户名
+        this.myusername = ''
+      })
+    },
     jumpback() {
       this.$router.push({path:'/user/my'})
     },
@@ -39,7 +49,10 @@ export default {
       });
       this.results = response.data;
     }
-  }
+  },
+  mounted() {
+    this.updateUsername()
+  },
 }
 </script>
 
