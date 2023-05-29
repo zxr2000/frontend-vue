@@ -7,15 +7,14 @@
       </el-avatar>
     </div>
     <div>
-      <h5 style="min-width: 100%;" class="mb-2">username{{showUserName}}</h5>
+      <h5 style="min-width: 100%;" class="mb-2">{{showUserName}}</h5>
     </div>
-
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="add">编辑用户</el-button>
+      <el-button type="primary" @click="dialogVisible = true">编辑用户</el-button>
       <el-button type="primary" @click="jumpback">退出登录</el-button>
     </div>
     <!--query-->
-    <div style="margin: 10px 10px ;width:20%;display: flex" >
+    <div style="margin: 10px; width:20%; display: flex" >
       <el-input v-model="search" placeholder="请输入查找用户名" />
       <el-button type="primary" style="margin-left: 5px" @click="searchUsename">查询</el-button>
     </div>
@@ -26,9 +25,8 @@
       <el-table-column prop="password" label="password" />
       <el-table-column prop="type" label="type" />
       <el-table-column fixed="right" label="Operations" width="120">
-        <template #default>
-          <el-button link type="primary" size="small" @click="Delete"
-          >删除</el-button>
+        <template #default="scope">
+          <el-button link type="primary" size="small" @click="delete(scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -36,7 +34,6 @@
 
     <div style="margin: 10px 0">
       <el-pagination
-          @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[5, 10, 20]"
@@ -83,11 +80,7 @@
 
 
 <script>
-import jsCookie from 'js-cookie';
 import axios from "axios";
-//import {request} from "axios";
-import E from 'wangeditor'
-//import request from "@/utils/request";
 let user
 
 export default {
@@ -113,7 +106,7 @@ export default {
   },
   computed: {
     showUserName() {
-      return jsCookie.get('username')
+      return window.localStorage.getItem("username")
     }
   },
   methods: {
@@ -136,7 +129,6 @@ export default {
       axios.post("http://localhost:8888/api/user/getAll", {
           page: this.currentPage,
           size: this.pageSize,
-          //search: this.search
         }
       ).then(res => {
         this.tableData = res.data.data
@@ -145,72 +137,24 @@ export default {
       })
     },
     add() {
-      this.dialogVisible = true
-      console.log(this.form)
-
+      console.log(window.localStorage.getItem("username") )
+      console.log( window.localStorage.getItem("password") )
       axios.post("http://localhost:8888/api/user/create", {
+        username: window.localStorage.getItem("username"),
+        password: window.localStorage.getItem("password"),
         createUsername: this.form.username,
         createPassword: this.form.password,
         createAge: this.form.age,
         createGender: this.form.gender,
-        createOccupation: this.form.occupation
+        createOccupation: this.form.occupation,
       }).then(res => {
         console.log(res)
       })
     },
-    // save() {
-    //   request.post("/api/user/create", this.form).then(res => {
-    //     console.log(res)
-    //   })
-    // },
-    save() {
-      this.form.content = user.txt.html()  // 获取 编辑器里面的值，然后赋予到实体当中
-
-      if (this.form.id) {  // 更新
-        axios.put("api/user/create", this.form).then(res => {
-          console.log(res)
-          if (res.code === '0') {
-            this.$message({
-              type: "success",
-              message: "更新成功"
-            })
-          } else {
-            this.$message({
-              type: "error",
-              message: res.msg
-            })
-          }
-          this.load() // 刷新表格的数据
-          this.dialogVisible = false  // 关闭弹窗
-        })
-      } else {  // 新增
-        let userStr = sessionStorage.getItem("user") || "{}"
-        let user = JSON.parse(userStr)
-        this.form.username= user.username
-
-        axios.post("/news", this.form).then(res => {
-          console.log(res)
-          if (res.code === '0') {
-            this.$message({
-              type: "success",
-              message: "新增成功"
-            })
-          } else {
-            this.$message({
-              type: "error",
-              message: res.msg
-            })
-          }
-
-          this.load() // 刷新表格的数据
-          this.dialogVisible = false  // 关闭弹窗
-        })
-      }
-
-    },
-    Delete(id) {
+    delete(id) {
       console.log(id)
-      axios.delete("api/user/delete" + id).then(res => {
+      axios.post("http://localhost:8888/api/user/delete").then(res => {
+        console.log(res)
         if (res.code === '0') {
           this.$message({
             type: "success",
@@ -230,15 +174,7 @@ export default {
       this.showData = this.tableData.slice( (this.currentPage - 1) *  20 ,  (this.currentPage - 1) * 20 + 20)
       console.log(this.showData)
     }
-    // mounted() {
-    //   this.load()
-    // }
   }
 }
 </script>
 
-<style scoped>
-
-
-
-</style>

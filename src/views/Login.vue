@@ -25,6 +25,7 @@ export default {
   name: "Login",
   data() {
     return {
+
       form: {
         name: '',
         password: ''
@@ -48,7 +49,8 @@ export default {
             console.log("用户类型为:", type)
             if(status === 1) {
               window.localStorage.setItem("user", type);
-              // console.log(type)
+              window.localStorage.setItem("username", this.form.name);
+              window.localStorage.setItem("password", this.form.password);
             } else if(status === 0) {
               alert("error")
             }

@@ -75,11 +75,12 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   console.log(to);
-  if(to.fullPath === "/fullPath") {
+  if(to.fullPath === "/manager") {
     if(window.localStorage.getItem("user") === "admin") {
       next();
     } else {
-      next("/login")
+      alert("无权限进入该页面");
+      next("/login");
     }
   } else {
     next();
