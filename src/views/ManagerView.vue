@@ -10,8 +10,8 @@
       <h5 style="min-width: 100%;" class="mb-2">{{showUserName}}</h5>
     </div>
     <div style="margin: 10px 0">
-      <el-button type="primary" @click="dialogVisible = true">编辑用户</el-button>
-      <el-button type="primary" @click="jumpback">退出登录</el-button>
+      <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
+      <el-button type="primary" @click="logout">退出登录</el-button>
     </div>
     <!--query-->
     <div style="margin: 10px; width:20%; display: flex" >
@@ -26,13 +26,13 @@
       <el-table-column prop="type" label="type" />
       <el-table-column fixed="right" label="Operations" width="120">
         <template #default="scope">
-          <el-button link type="primary" size="small" @click="delete(scope.$index)">删除</el-button>
+          <el-button link type="primary" size="small" @click.prevent = "() => deleteItem(scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
 
-    <div style="margin: 10px 0">
+    <div style="margin: 10px 0" class="pagination">
       <el-pagination
           @current-change="handleCurrentChange"
           :current-page="currentPage"
@@ -43,10 +43,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog v-model="dialogVisible"
-               title="Tips"
-               width="30%"
-    >
+    <el-dialog v-model="dialogVisible" title="Tips" width="30%">
       <el-form :model="form" >
         <el-form-item label="username">
           <el-input v-model="form.username" style="width:80%"></el-input>
@@ -68,7 +65,7 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">Cancel</el-button>
-          <el-button type="primary" @click="add">
+          <el-button type="primary" @click="addItem">
             Confirm
           </el-button>
         </span>
@@ -81,8 +78,7 @@
 
 <script>
 import axios from "axios";
-let user
-
+import { ElMessage } from 'element-plus'
 export default {
   name: "ManagerView",
   components: {},
@@ -110,8 +106,9 @@ export default {
     }
   },
   methods: {
-    jumpback() {
-      this.$router.push({path: '/login'})
+    logout() {
+      this.$router.push({path: '/login'});
+      window.localStorage.clear();
     },
 
     searchUsename() {
@@ -136,32 +133,47 @@ export default {
         this.showData = this.tableData.slice(this.index, this.index + 20);
       })
     },
-    add() {
-      console.log(window.localStorage.getItem("username") )
-      console.log( window.localStorage.getItem("password") )
-      axios.post("http://localhost:8888/api/user/create", {
-        username: window.localStorage.getItem("username"),
-        password: window.localStorage.getItem("password"),
-        createUsername: this.form.username,
-        createPassword: this.form.password,
-        createAge: this.form.age,
-        createGender: this.form.gender,
-        createOccupation: this.form.occupation,
-      }).then(res => {
-        console.log(res)
-      })
-    },
-    delete(id) {
-      console.log(id)
-      axios.post("http://localhost:8888/api/user/delete").then(res => {
-        console.log(res)
-        if (res.code === '0') {
-          this.$message({
-            type: "success",
-            message: "删除成功"
+    addItem() {
+      const data = new FormData();
+      data.append("username", window.localStorage.getItem("username"))
+      data.append("password", window.localStorage.getItem("password"))
+      data.append("createUsername", this.form.username)
+      data.append("createPassword", this.form.password)
+      data.append("createAge", this.form.age)
+      data.append("createGender", this.form.gender)
+      data.append("createOccupation", this.form.occupation)
+      axios.post("http://localhost:8888/api/user/create", data).then(res => {
+        console.log(res);
+        if(res.data.status === "FAILURE" || res.data.status === "UNAUTHORIZED") {
+          ElMessage({
+            message: res.data.data,
+            type: "error"
           })
         } else {
-          this.$message({
+          ElMessage({
+            message: "成功创建新用户",
+            type: "success"
+          });
+          this.dialogVisible = false;
+        }
+      })
+    },
+    deleteItem(index) {
+      const userID = this.showData[index].id;
+      const data = new FormData();
+      data.append("username", window.localStorage.getItem("username"));
+      data.append("password", window.localStorage.getItem("password"));
+      data.append("deleteId", userID);
+      console.log("开始执行删除", userID)
+      axios.post("http://localhost:8888/api/user/delete", data).then(res => {
+        console.log(res)
+        if (res.data.status === "SUCCESS") {
+          ElMessage({
+            type: "success",
+            message: "删除用户成功"
+          })
+        } else {
+          ElMessage({
             type: "error",
             message: res.msg
           })
