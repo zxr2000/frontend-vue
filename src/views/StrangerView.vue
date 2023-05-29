@@ -1,8 +1,11 @@
 <template>
   <el-text>查看推荐——陌生人</el-text>
 
-  <el-table :data="tableData" border stripe style="width: 100%">
-    <el-table-column type="selection" width="55" />
+  <el-table :data="tableData" border stripe style="width: 100%" :row-key="getRowKey">
+    <el-table-column type="selection" width="55" :reserve-delection="true" />
+<!--      <div slot-scope="e">-->
+<!--        {{e.$index+1}}-->
+<!--      </div>-->
     <el-table-column prop="id" label="ID" />
     <el-table-column prop="username" label="username" />
   </el-table>
@@ -38,10 +41,13 @@ export default {
       ]
     }
   },
-  // created() {
-  //   this.load()
-  // },
+  created() {
+    //this.load()
+  },
   methods:{
+    getRowKey(row){
+      return row.id;
+    },
     load(){
       request.get("api/user/getAll", {
         params: {

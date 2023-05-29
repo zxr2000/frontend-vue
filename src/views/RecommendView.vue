@@ -46,8 +46,8 @@
         <el-option label="Antarctica" value="Antarctica"/>
       </el-select>
     </el-form-item>
-    <el-form-item label="Resources">
-      <el-radio-group v-model="form.resource">
+    <el-form-item label="gender">
+      <el-radio-group v-model="form.gender">
         <el-radio label="Man" />
         <el-radio label="Woman" />
       </el-radio-group>

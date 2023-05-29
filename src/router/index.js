@@ -71,6 +71,19 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
-})
+});
 
-export default router
+router.beforeEach((to, from, next) => {
+  console.log(to);
+  if(to.fullPath === "/fullPath") {
+    if(window.localStorage.getItem("user") === "admin") {
+      next();
+    } else {
+      next("/login")
+    }
+  } else {
+    next();
+  }
+
+})
+export default router;

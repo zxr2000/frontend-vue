@@ -17,12 +17,12 @@
     <!--query-->
     <div style="margin: 10px 10px ;width:20%;display: flex" >
       <el-input v-model="search" placeholder="请输入查找用户名" />
-      <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
+      <el-button type="primary" style="margin-left: 5px" @click="searchUsename">查询</el-button>
     </div>
-    <el-table :data="tableData" border stripe style="width: 100%">
-      <el-table-column prop="id" label="ID" />
+    <el-table :data="showData" border stripe style="width: 100%">
+      <el-table-column prop="id" label="id" />
       <el-table-column prop="username" label="username" />
-      <el-table-column prop="nickname" label="nickName" />
+      <el-table-column prop="gender" label="gender" />
       <el-table-column prop="password" label="password" />
       <el-table-column prop="type" label="type" />
       <el-table-column fixed="right" label="Operations" width="120">
@@ -51,27 +51,30 @@
                width="30%"
     >
       <el-form :model="form" >
-        <el-form-item label="id">
-          <el-input v-model="form.id" style="width:80%"></el-input>
-        </el-form-item>
         <el-form-item label="username">
           <el-input v-model="form.username" style="width:80%"></el-input>
         </el-form-item>
-        <el-form-item label="nickname">
-          <el-input v-model="form.nickname" style="width:80%"></el-input>
-        </el-form-item>
+
         <el-form-item label="password">
           <el-input v-model="form.password" style="width:80%"></el-input>
         </el-form-item>
+        <el-form-item label="age">
+          <el-input v-model="form.age" style="width:80%"></el-input>
+        </el-form-item>
+        <el-form-item label="gender">
+          <el-input v-model="form.gender" style="width:80%"></el-input>
+        </el-form-item>
+        <el-form-item label="occupation">
+          <el-input v-model="form.occupation" style="width:80%"></el-input>
+        </el-form-item>
       </el-form>
-      <span>新增用户</span>
       <template #footer>
-      <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="save = false">
-          Confirm
-        </el-button>
-      </span>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="add">
+            Confirm
+          </el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
@@ -99,13 +102,15 @@ export default {
       pageSize: 10,
       total: 0,
       dialogVisible: false,
-      tableData: []
+      tableData: [],
+      showData: [],
+      index: 0
     }
   },
 
-  // created() {
-  //   this.load()
-  // },
+  created() {
+    this.load()
+  },
   computed: {
     showUserName() {
       return jsCookie.get('username')
@@ -116,37 +121,42 @@ export default {
       this.$router.push({path: '/login'})
     },
 
-    load() {
-      axios.get("api/user/getAll", {
+    searchUsename() {
+      axios.get("http://localhost:8888/api/user/getUser", {
         params: {
-          pageNum: this.currentPage,
-          pageSize: this.pageSize,
-          search: this.search
+          username: this.search
         }
       }).then(res => {
-        this.tableData = res.data.records
-        this.total = res.data.total
+        console.log(res)
+        this.showData =  [res.data.data]
+      })
+    },
+
+    load() {
+      axios.post("http://localhost:8888/api/user/getAll", {
+          page: this.currentPage,
+          size: this.pageSize,
+          //search: this.search
+        }
+      ).then(res => {
+        this.tableData = res.data.data
+        this.total = res.data.data.length
+        this.showData = this.tableData.slice(this.index, this.index + 20);
       })
     },
     add() {
       this.dialogVisible = true
-      this.form = {}
+      console.log(this.form)
 
-      this.$nextTick(() => {
-        // 关联弹窗里面的div，new一个 editor对象
-        if (!user) {
-          user = new E('#div1')
-
-          // 配置 server 接口地址
-          user.config.uploadImgServer = 'http://' + window.server.filesUploadUrl + ':8888/files/user/upload'
-          user.config.uploadFileName = "file"  // 设置上传参数名称
-          user.create()
-        }
-
-        user.txt.html("")
-
+      axios.post("http://localhost:8888/api/user/create", {
+        createUsername: this.form.username,
+        createPassword: this.form.password,
+        createAge: this.form.age,
+        createGender: this.form.gender,
+        createOccupation: this.form.occupation
+      }).then(res => {
+        console.log(res)
       })
-
     },
     // save() {
     //   request.post("/api/user/create", this.form).then(res => {
@@ -215,13 +225,10 @@ export default {
         this.load()  // 删除之后重新加载表格的数据
       })
     },
-    handleSizeChange(pageSize) {   // 改变当前每页的个数触发
-      this.pageSize = pageSize
-      this.load()
-    },
     handleCurrentChange(pageNum) {  // 改变当前页码触发
-      this.currentPage = pageNum
-      this.load()
+      this.currentPage = pageNum;
+      this.showData = this.tableData.slice( (this.currentPage - 1) *  20 ,  (this.currentPage - 1) * 20 + 20)
+      console.log(this.showData)
     }
     // mounted() {
     //   this.load()

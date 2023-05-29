@@ -1,8 +1,8 @@
 <template>
   <el-text>查看推荐——朋友</el-text>
 
-  <el-table :data="tableData" border stripe style="width: 100%">
-    <el-table-column type="selection" width="55" />
+  <el-table :data="tableData" border stripe style="width: 100%" :row-key="getRowKey">
+    <el-table-column type="selection" width="55" :reserve-delection="true" />
     <el-table-column prop="id" label="ID" />
     <el-table-column prop="username" label="username" />
   </el-table>
@@ -29,7 +29,7 @@ export default {
   name: "FriendView",
   data() {
     return {
-      search: '',
+      //search: '',
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -41,12 +41,15 @@ export default {
   //   this.load()
   // },
   methods:{
+    getRowKey(row){
+      return row.id;
+    },
     load(){
       request.get("api/user/getAll", {
         params: {
           pageNum: this.currentPage,
           pageSize: this.pageSize,
-          search: this.search
+          //search: this.search
         }
       }).then(res => {
         this.tableData = res.data.records

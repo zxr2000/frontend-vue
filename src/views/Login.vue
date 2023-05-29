@@ -36,21 +36,23 @@ export default {
       const username = this.form.name;
       const password = this.form.password;
       // 发送登录请求给后台 API
-      axios.post('/api/user/login', {
+      axios.post('http://localhost:8888/api/user/login', {
         username: username,
         password: password
       })
           .then((response) => {
             // 登录成功，保存用户信息到本地
-            const token = response.data.token;
-            localStorage.setItem('token', token);
-            // 跳转到首页
-            this.$router.push({path:'/user'});
+            console.log(response.data.data)
+            let status = response.data.data.status === "用户名或密码错误" ? 0 : 1;
+            let type = response.data.data.type ?? null;
+            console.log("用户类型为:", type)
+            if(status === 1) {
+              window.localStorage.setItem("user", type);
+              // console.log(type)
+            } else if(status === 0) {
+              alert("error")
+            }
           })
-          .catch((error) => {
-            // 登录失败，给出提示
-            alert(error.response.data.message);
-          });
     }
   }
 }
