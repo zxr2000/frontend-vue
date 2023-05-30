@@ -1,17 +1,16 @@
 <template>
-  <div>
+  <div class="login-container">
     <img src="../assets/img.png" style="height: 200px;width: 280px">
-    <el-form ref="form" :model="form" label-width="500px">
-      <el-form-item label="ID/user_name:">
-        <el-input v-model="form.name" style="width:500px"></el-input>
+    <el-form ref="form" :model="form">
+      <el-form-item label="Username" style="width: 400px">
+        <el-input v-model="form.name"></el-input>
       </el-form-item>
-
-      <el-form-item label="password:">
-        <el-input v-model="form.password" style="width:500px"></el-input>
+      <el-form-item label="Password" style="width: 400px">
+        <el-input v-model="form.password"></el-input>
       </el-form-item>
-      <el-form-item label-width="650px">
-        <el-button type="primary" @click="onSubmit">log in</el-button>
-        <el-button>cancel</el-button>
+      <el-form-item style="width: 400px;">
+        <el-button type="primary" @click="onSubmit">Login</el-button>
+        <el-button>Cancel</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -61,5 +60,19 @@ export default {
 </script>
 
 <style scoped>
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 
+/deep/ .el-form-item__content {
+  display: flex;
+  justify-content: center!important
+}
+
+img {
+  margin-bottom: 40px;
+}
 </style>

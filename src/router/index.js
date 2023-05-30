@@ -1,71 +1,63 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import Login from "@/views/Login";
-import UserView from "@/views/UserView";
-import UserMy from "@/views/UserMy";
-import UserMyMessage from "@/views/UserMyMessage";
-import UserMyFriend from "@/views/UserMyFriend";
-import RecomRes from "@/views/RecomRes";
-import ManagerView from "@/views/ManagerView";
-import RecommendView from "@/views/RecommendView";
-import StrangerView from "@/views/StrangerView";
-import FriendView from "@/views/FriendView";
 
 const routes = [
   {
+    path: "",
+    redirect: "/login"
+  },
+  {
     path: '/login',
     name: 'login',
-    component: Login
+    component: () => import("@/views/Login.vue")
   },
   {
-    path: '/user',
-    name: 'user',
-    component: UserView
+    path: "/home",
+    name: "home",
+    component: () => import("@/views/Home.vue"),
+    redirect: "/home/my",
+    children: [
+      {
+        path: "my",
+        name: "my",
+        component: () => import("@/views/UserMy.vue")
+      },
+      {
+        path: "friend",
+        name: "friend",
+        component: () => import("@/views/UserMyFriend.vue")
+      },
+      {
+        path: "message",
+        name: "message",
+        component: () => import("@/views/UserMyMessage.vue")
+      },
+      {
+        path: "recom",
+        name: "recom",
+        component: () => import("@/views/RecommendView.vue")
+      },
+      {
+        path: "manager",
+        name: "manager",
+        component:  () => import("@/views/ManagerView.vue") 
+      }
+    ]
   },
-  {
-    path: '/manager',
-    name: 'manager',
-    component: ManagerView
-  },
-  {
-    path: '/user/my',
-    name: 'usermy',
-    component: UserMy
-  },
-  {
-    path: '/user/my/message',
-    name: 'usermymessage',
-    component: UserMyMessage
-  },
-  {
-    path: '/user/my/friend',
-    name: 'usermyfriend',
-    component: UserMyFriend
-  },
-  {
-    path: '/user/recom',
-    name: 'userrecom',
-    component: RecommendView
-  },
-  {
-    path: '/user/recom/res',
-    name: 'userrecomres',
-    component: RecomRes
-  },
-  {
-    path: '/user/recom/stranger',
-    name: 'userrecomstranger',
-    component: StrangerView
-  },
-  {
-    path: '/user/recom/friend',
-    name: 'userrecomfriend',
-    component: FriendView
-  },
-  {
-    path: '/',
-    name: 'home',
-    component: Login
-  },
+  // {
+  //   path: '/user/recom/res',
+  //   name: 'userrecomres',
+  //   component: RecomRes
+  // },
+  // {
+  //   path: '/user/recom/stranger',
+  //   name: 'userrecomstranger',
+  //   component: StrangerView
+  // },
+  // {
+  //   path: '/user/recom/friend',
+  //   name: 'userrecomfriend',
+  //   component: FriendView
+  // },
 ]
 
 const router = createRouter({
@@ -75,16 +67,19 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   console.log(to);
-  if(to.fullPath === "/manager") {
+  if(to.fullPath === "/home/manager") {
     if(window.localStorage.getItem("user") === "admin") {
       next();
     } else {
       alert("无权限进入该页面");
       next("/login");
     }
+  } else if(to.fullPath === "/login") {
+    if(window.localStorage.getItem("username") && window.localStorage.getItem("password")) {
+      next("/home");
+    }
   } else {
     next();
   }
-
 })
 export default router;

@@ -1,17 +1,8 @@
 
 <template>
   <div class="manager">
-    <div>
-      <el-avatar>
-        <img src="../assets/portrait.jpg"/>
-      </el-avatar>
-    </div>
-    <div>
-      <h5 style="min-width: 100%;" class="mb-2">{{showUserName}}</h5>
-    </div>
     <div style="margin: 10px 0">
       <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
-      <el-button type="primary" @click="logout">退出登录</el-button>
     </div>
     <!--query-->
     <div style="margin: 10px; width:20%; display: flex" >
@@ -30,8 +21,6 @@
         </template>
       </el-table-column>
     </el-table>
-
-
     <div style="margin: 10px 0" class="pagination">
       <el-pagination
           @current-change="handleCurrentChange"
@@ -184,7 +173,6 @@ export default {
     handleCurrentChange(pageNum) {  // 改变当前页码触发
       this.currentPage = pageNum;
       this.showData = this.tableData.slice( (this.currentPage - 1) *  20 ,  (this.currentPage - 1) * 20 + 20)
-      console.log(this.showData)
     }
   }
 }

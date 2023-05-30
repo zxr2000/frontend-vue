@@ -1,12 +1,4 @@
 <template>
-  <div>
-    <el-row>
-      <div style="margin-left:400px;margin-right: 500px">
-        {{myusername}}
-      </div>
-      <el-button round @click="jumpback">返回</el-button>
-    </el-row>
-  </div>
   <div style="margin-left: -300px;margin-top: 50px">
     好友添加请求：
   </div>
