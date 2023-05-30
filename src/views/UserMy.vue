@@ -2,7 +2,7 @@
   <h1>我点赞过的电影列表</h1>
   <div class="myMovie-container"> 
     <div class="movie-item" v-for="(item, index) in movies" :key="index">
-      <img :src="imgUrl" alt="">
+      <img :src="imgUrl" alt="点赞过的电影" loading="lazy">
       <div class="movie-itemTitle">{{ item.title }}</div>
     </div>
   </div>
