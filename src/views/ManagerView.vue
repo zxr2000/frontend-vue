@@ -4,7 +4,6 @@
     <div style="margin: 10px 0">
       <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
     </div>
-    <!--query-->
     <div style="margin: 10px; width:20%; display: flex">
       <el-input v-model="search" placeholder="请输入查找用户名" />
       <el-button type="primary" style="margin-left: 5px" @click="searchUsename">查询</el-button>

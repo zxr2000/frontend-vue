@@ -1,7 +1,17 @@
 <template>
     <div class="movie-layout">
         <el-container>
-            <el-header class="movie-header">Header</el-header>
+            <el-header class="movie-header">
+                <div class="logo-containr">
+                    <span>电影推荐系统</span>
+                </div>
+                <div class="user-container">
+                    <div class="user">
+                        {{ username }}
+                    </div>
+                    <div class="logout" @click="logout">退出登录</div>
+                </div>
+            </el-header>
             <el-container class="movie-body">
                 <el-aside width="200px" class="movie-aside">
                     <el-menu active-text-color="#ffd04b" background-color="#545c64" default-active="2" text-color="#fff"
@@ -38,21 +48,59 @@
 
 <script setup>
 import {ref} from "vue";
+import { useRouter } from "vue-router";
 let disabled = ref(true);
-
+let username = window.localStorage.getItem("username")
+const router = useRouter();
 if(window.localStorage.getItem("user") === "admin") {
     disabled.value = false;
+}
+
+function logout() {
+    window.localStorage.clear();
+    router.push("/login")
 }
 </script>
 
 <style scoped>
 .movie-header {
-    background-color: #000;
+    background-color: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #fff;
+    
 }
+.logo-containr {
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    background: -webkit-linear-gradient(315deg,#42d392 25%,#647eff);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}   
+
+.user-container {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.logout {
+    margin-left: 10px;
+
+}
+
+.logout:hover {
+    color: rgb(116, 116, 246)
+}
+
 
 .movie-body {
     height: calc(100vh - 60px);
-    background-color: antiquewhite;
+    background-color: #fff;
 }
 
 .movie-body .movie-aside {
