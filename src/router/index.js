@@ -27,11 +27,6 @@ const routes = [
         component: () => import("@/views/UserMyFriend.vue")
       },
       {
-        path: "message",
-        name: "message",
-        component: () => import("@/views/UserMyMessage.vue")
-      },
-      {
         path: "recom",
         name: "recom",
         component: () => import("@/views/RecommendView.vue")

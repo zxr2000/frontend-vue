@@ -16,12 +16,6 @@
                             </el-icon>
                             <span>我的好友</span>
                         </el-menu-item>
-                        <el-menu-item index="/home/message">
-                            <el-icon>
-                                <setting />
-                            </el-icon>
-                            <span>我的消息</span>
-                        </el-menu-item>
                         <el-menu-item index="/home/manager" :disabled="disabled">
                             <el-icon><icon-menu /></el-icon>
                             <span>用户管理</span>

@@ -1,8 +1,8 @@
 <template>
-  <h1>我点赞过的电影列表</h1>
+  <h1>已评分电影</h1>
   <div class="myMovie-container"> 
     <div class="movie-item" v-for="(item, index) in movies" :key="index">
-      <img :src="imgUrl" alt="点赞过的电影" loading="lazy">
+      <img :src="imgUrl" alt="已评分电影" loading="lazy">
       <div class="movie-itemTitle">{{ item.title }}</div>
     </div>
   </div>
@@ -28,20 +28,25 @@ h1 {
   text-align: center;
   font-weight: 600;
   font-size: 23px;
+  background-color: rgba(0,0,0,0.5);
+  padding: 10px;
+  color: #000;
+  border-radius: 5px;
 }
 .myMovie-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  
 }
 
 .movie-item {
   position: relative;
   background-color: #fff;
   border-radius: 10px;
-  width: 300px;
-  height: 400px;
+  max-width: 190px;
+  height: 300px;
   margin-top: 20px;
+  margin-left: 10px;
   transition: all .5s ease;
   border-radius: 10px;
   cursor: pointer;
