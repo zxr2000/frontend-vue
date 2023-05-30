@@ -1,64 +1,67 @@
 <template>
-  <div style="margin-top: 80px">
-    <el-row>
-        <el-card :body-style="{ padding: '0px' }">
-          <img src="imageUrl" class="image">
-          <div style="padding: 10px;">
-            <span>{{ movieName }}</span>
-            <div class="bottom clearfix">
-              <el-button type="text" class="button">操作按钮</el-button>
-            </div>
-          </div>
-        </el-card>
-    </el-row>
-  </div>
-  <div style="margin-top: 80px">
-    <el-button type="primary" :icon="ArrowLeft" @click="previouspage" />
-    <span style="margin-right: 25px;margin-left: 25px">第{{ currentPage }}/{{ pageSum }}页</span>
-    <el-button type="primary" :icon="ArrowRight" @click="nextpage" />
+  <h1>我点赞过的电影列表</h1>
+  <div class="myMovie-container"> 
+    <div class="movie-item" v-for="(item, index) in movies" :key="index">
+      <img :src="imgUrl" alt="">
+      <div class="movie-itemTitle">{{ item.title }}</div>
+    </div>
   </div>
 </template>
 
-<script>
-import { ArrowLeft, ArrowRight } from "@element-plus/icons";
+<script setup>
 import axios from "axios";
-export default {
-  name: "UserMy",
-  setup() {
-    return {
-      ArrowLeft,
-      ArrowRight
-    }
-  },
-  data() {
-    return {
-      movieName: '电影名',
-      imgUrl: '',
-      currentPage: 1,
-      pageSum: 10
-    }
-  },
-  methods: {},
-  created() {
-    // 使用axios库，调用后端接口，从数据库中读取电影名及对应的图片url
-    // 并将其保存到data属性中
-    axios.get('/api/movies/1').then((response) => {
-      const data = response.data;
-      this.movieName = data.movieName;
-      this.imgUrl = data.imgUrl;
-    }).catch((err) => {
-      console.error('failed to fetch movie data:', err);
-    });
-
-    
-  },
-  computed: {
-    imageUrl() {
-      // 返回一个由电影名所确定的图片的url
-      return `https://example.com/images/${this.imgUrl}`;
-    }
+import {ref, reactive } from "vue";
+import imgUrl from "@/assets/movie.jpg"
+const movies = ref([])
+axios.get("http://localhost:8888/api/rating/getByUser", {
+  params: {
+    userId: window.localStorage.getItem("userId")
   }
-}
+}).then(res => {
+  console.log(res.data.data);
+  movies.value = res.data.data;
+})
 </script>
 
-<style scoped></style>
+<style scoped>
+h1 {
+  text-align: center;
+  font-weight: 600;
+  font-size: 23px;
+}
+.myMovie-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.movie-item {
+  position: relative;
+  background-color: #fff;
+  border-radius: 10px;
+  width: 300px;
+  height: 400px;
+  margin-top: 20px;
+  transition: all .5s ease;
+  border-radius: 10px;
+  cursor: pointer;
+}
+img  {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+}
+.movie-item:hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+.movie-itemTitle {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-weight: 600;
+  background-color: rgba(0,0,0,0.5);
+  color: #fff;
+}
+</style>

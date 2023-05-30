@@ -72,11 +72,12 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       alert("无权限进入该页面");
-      next("/login");
     }
   } else if(to.fullPath === "/login") {
     if(window.localStorage.getItem("username") && window.localStorage.getItem("password")) {
       next("/home");
+    } else {
+      next();
     }
   } else {
     next();
