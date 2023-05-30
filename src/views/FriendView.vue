@@ -44,6 +44,7 @@ export default {
     load(){
       request.get("api/user/getAll", {
         params: {
+          
           pageNum: this.currentPage,
           pageSize: this.pageSize,
           //search: this.search

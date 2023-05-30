@@ -5,7 +5,7 @@
       <el-button type="primary" @click="dialogVisible = true">添加用户</el-button>
     </div>
     <!--query-->
-    <div style="margin: 10px; width:20%; display: flex" >
+    <div style="margin: 10px; width:20%; display: flex">
       <el-input v-model="search" placeholder="请输入查找用户名" />
       <el-button type="primary" style="margin-left: 5px" @click="searchUsename">查询</el-button>
     </div>
@@ -17,23 +17,18 @@
       <el-table-column prop="type" label="type" />
       <el-table-column fixed="right" label="Operations" width="120">
         <template #default="scope">
-          <el-button link type="primary" size="small" @click.prevent = "() => deleteItem(scope.$index)">删除</el-button>
+          <el-button link type="primary" size="small" @click.prevent="() => deleteItem(scope.$index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <div style="margin: 10px 0" class="pagination">
-      <el-pagination
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+      <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5, 10, 20]"
+        :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
 
     <el-dialog v-model="dialogVisible" title="Tips" width="30%">
-      <el-form :model="form" >
+      <el-form :model="form">
         <el-form-item label="username">
           <el-input v-model="form.username" style="width:80%"></el-input>
         </el-form-item>
@@ -96,7 +91,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$router.push({path: '/login'});
+      this.$router.push({ path: '/login' });
       window.localStorage.clear();
     },
 
@@ -107,16 +102,16 @@ export default {
         }
       }).then(res => {
         console.log(res)
-        this.showData =  [res.data.data]
+        this.showData = [res.data.data]
       })
     },
 
     load() {
-      axios.post("http://localhost:8888/api/user/getAll", {
-          page: this.currentPage,
-          size: this.pageSize,
+      axios.get("http://localhost:8888/api/user/getAll", {
+        params: {
+          userId: window.localStorage.getItem("userId"),
         }
-      ).then(res => {
+      }).then(res => {
         this.tableData = res.data.data
         this.total = res.data.data.length
         this.showData = this.tableData.slice(this.index, this.index + 20);
@@ -133,7 +128,7 @@ export default {
       data.append("createOccupation", this.form.occupation)
       axios.post("http://localhost:8888/api/user/create", data).then(res => {
         console.log(res);
-        if(res.data.status === "FAILURE" || res.data.status === "UNAUTHORIZED") {
+        if (res.data.status === "FAILURE" || res.data.status === "UNAUTHORIZED") {
           ElMessage({
             message: res.data.data,
             type: "error"
@@ -172,7 +167,7 @@ export default {
     },
     handleCurrentChange(pageNum) {  // 改变当前页码触发
       this.currentPage = pageNum;
-      this.showData = this.tableData.slice( (this.currentPage - 1) *  20 ,  (this.currentPage - 1) * 20 + 20)
+      this.showData = this.tableData.slice((this.currentPage - 1) * 20, (this.currentPage - 1) * 20 + 20)
     }
   }
 }
