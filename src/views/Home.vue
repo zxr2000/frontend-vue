@@ -7,26 +7,25 @@
                     <el-menu active-text-color="#ffd04b" background-color="#545c64" default-active="2" text-color="#fff"
                         class="menu" router>
                         <el-menu-item index="/home/my">
-                            <el-icon><icon-menu /></el-icon>
+                            <el-icon><User /></el-icon>
                             <span>关于我的</span>
                         </el-menu-item>
+                        <el-menu-item index="/home/movies">
+                            <el-icon><View /></el-icon>
+                            <span>电影总览</span>
+                        </el-menu-item>
+                        <el-menu-item index="/home/recom">
+                            <el-icon><HelpFilled /></el-icon>
+                            <span>电影推荐</span>
+                        </el-menu-item>
                         <el-menu-item index="/home/friend">
-                            <el-icon>
-                                <setting />
-                            </el-icon>
+                            <el-icon><UserFilled /></el-icon>
                             <span>我的好友</span>
                         </el-menu-item>
                         <el-menu-item index="/home/manager" :disabled="disabled">
-                            <el-icon><icon-menu /></el-icon>
+                            <el-icon><Tools /></el-icon>
                             <span>用户管理</span>
                         </el-menu-item>
-                        <el-menu-item index="/home/recom">
-                            <el-icon>
-                                <setting />
-                            </el-icon>
-                            <span>电影推荐</span>
-                        </el-menu-item>
-                        
                     </el-menu>
                 </el-aside>
                 <el-main class="movie-main">

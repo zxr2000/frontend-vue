@@ -35,24 +35,14 @@ const routes = [
         path: "manager",
         name: "manager",
         component:  () => import("@/views/ManagerView.vue") 
+      },
+      {
+        path: "movies",
+        name: "movies",
+        component: () => import("@/views/MovieView.vue")
       }
     ]
-  },
-  // {
-  //   path: '/user/recom/res',
-  //   name: 'userrecomres',
-  //   component: RecomRes
-  // },
-  // {
-  //   path: '/user/recom/stranger',
-  //   name: 'userrecomstranger',
-  //   component: StrangerView
-  // },
-  // {
-  //   path: '/user/recom/friend',
-  //   name: 'userrecomfriend',
-  //   component: FriendView
-  // },
+  }
 ]
 
 const router = createRouter({
