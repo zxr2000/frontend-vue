@@ -1,4 +1,4 @@
-<template >
+<template>
   <div class="recommend-container">
     <h1>电影推荐</h1>
     <div class="recommendMovies-container">
@@ -9,8 +9,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script setup>
 import axios from "axios"
