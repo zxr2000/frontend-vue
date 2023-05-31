@@ -1,4 +1,3 @@
-
 <template>
   <div class="manager">
     <div style="margin: 10px 0">
@@ -20,9 +19,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <div style="margin: 10px 0" class="pagination">
-      <el-pagination @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[5, 10, 20]"
-        :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    <div class="pagination">
+      <el-pagination 
+        @current-change="handleCurrentChange" 
+        :current-page="currentPage"
+        layout="prev, pager, next" 
+        :total="total"
+        background 
+        >
       </el-pagination>
     </div>
 
@@ -71,7 +75,6 @@ export default {
       form: {},
       search: '',
       currentPage: 1,
-      pageSize: 10,
       total: 0,
       dialogVisible: false,
       tableData: [],
@@ -112,7 +115,7 @@ export default {
         }
       }).then(res => {
         this.tableData = res.data.data
-        this.total = res.data.data.length
+        this.total = Math.ceil(res.data.data.length / 20) * 10
         this.showData = this.tableData.slice(this.index, this.index + 20);
       })
     },
@@ -171,4 +174,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.pagination {
+  margin: 10px;
+  /* margin-left: 50%;
+  transform: translate(-50%); */
+}
+</style>
 

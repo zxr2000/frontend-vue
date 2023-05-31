@@ -64,6 +64,12 @@ router.beforeEach((to, from, next) => {
     } else {
       next();
     }
+  } else if(/^\/home\/?.+/g.test(to.fullPath)){
+    if(window.localStorage.getItem("username") && window.localStorage.getItem("password")) {
+      next();
+    } else {
+      next("/login")
+    }
   } else {
     next();
   }
