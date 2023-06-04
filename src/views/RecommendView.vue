@@ -1,7 +1,7 @@
 <template>
   <div class="recommend-container">
     <h1>电影推荐</h1>
-    <div class="recommendMovies-container">
+    <div class="recommendMovies-container" v-loading="loading">
       <div class="movie-item" v-for="(item, index) in recommendMovies" :key="index">
         <img :src="imgUrl" alt="已评分电影" loading="lazy">
         <div class="movie-itemTitle">{{ item.title }}</div>
@@ -13,16 +13,22 @@
 <script setup>
 import axios from "axios"
 import { ref } from "vue"
+import imgUrl from "@/assets/SAO.jpg"
 
+const loading = ref(true)
 const recommendMovies = ref([]);
-axios.get("http://localhost:8888/api/movie/getRecommend", {
-  params: {
-    userId: window.localStorage.getItem("userId")
-  }
-}).then(res => {
-  console.log(res.data);
-  recommendMovies.value = res.data.data
-})
+function loadMovies() {
+  axios.get("http://localhost:8888/api/movie/getRecommend", {
+    params: {
+      userId: window.localStorage.getItem("userId")
+    }
+  }).then(res => {
+    console.log(res.data);
+    recommendMovies.value = res.data.data
+    loading.value = false;
+  })
+}
+loadMovies()
 
 </script>
 
@@ -40,6 +46,7 @@ h1 {
 .recommendMovies-container {
   display: flex;
   flex-wrap: wrap;
+  min-height: calc(100vh - 180px);
 }
 
 .movie-item {
@@ -51,7 +58,6 @@ h1 {
   margin-top: 20px;
   margin-left: 10px;
   transition: all .5s ease;
-  border-radius: 10px;
   cursor: pointer;
 }
 img  {
