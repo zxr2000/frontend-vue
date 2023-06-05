@@ -10,9 +10,38 @@
       </el-form-item>
       <el-form-item style="width: 400px;">
         <el-button type="primary" @click="onSubmit">Login</el-button>
+        <el-button type="primary" @click="dialogVisible = true">Register</el-button>
         <el-button>Cancel</el-button>
       </el-form-item>
     </el-form>
+    <el-dialog v-model="dialogVisible" title="Tips" width="30%">
+      <el-form :model="form1">
+        <el-form-item label="username">
+          <el-input v-model="form1.username" style="width:80%"></el-input>
+        </el-form-item>
+
+        <el-form-item label="password">
+          <el-input v-model="form1.password" style="width:80%"></el-input>
+        </el-form-item>
+        <el-form-item label="age">
+          <el-input v-model="form1.age" style="width:80%"></el-input>
+        </el-form-item>
+        <el-form-item label="gender">
+          <el-input v-model="form1.gender" style="width:80%"></el-input>
+        </el-form-item>
+        <el-form-item label="occupation">
+          <el-input v-model="form1.occupation" style="width:80%"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">Cancel</el-button>
+          <el-button type="primary" @click="addItem">
+            Confirm
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 
 </template>
@@ -28,7 +57,9 @@ export default {
       form: {
         name: '',
         password: ''
-      }
+      },
+      form1: {},
+      dialogVisible: false
     }
   },
   methods: {
@@ -52,7 +83,7 @@ export default {
               window.localStorage.setItem("userId", userId);
               ElMessage({
                 type: "success",
-                message: "登录成果"
+                message: "登录成功"
               })
               this.$router.push("/home")
             } else if(status === 0) {
@@ -62,6 +93,31 @@ export default {
               })
             }
           })
+    },
+    addItem() {
+      const data = new FormData();
+      data.append("username", window.localStorage.getItem("username"))
+      data.append("password", window.localStorage.getItem("password"))
+      data.append("createUsername", this.form1.username)
+      data.append("createPassword", this.form1.password)
+      data.append("createAge", this.form1.age)
+      data.append("createGender", this.form1.gender)
+      data.append("createOccupation", this.form1.occupation)
+      axios.post("http://localhost:8888/api/user/create", data).then(res => {
+        console.log(res);
+        if (res.data.status === "FAILURE" || res.data.status === "UNAUTHORIZED") {
+          ElMessage({
+            message: res.data.data,
+            type: "error"
+          })
+        } else {
+          ElMessage({
+            message: "成功创建新用户",
+            type: "success"
+          });
+          this.dialogVisible = false;
+        }
+      })
     }
   }
 }
