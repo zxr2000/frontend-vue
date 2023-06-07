@@ -34,12 +34,17 @@ const routes = [
       {
         path: "manager",
         name: "manager",
-        component:  () => import("@/views/ManagerView.vue") 
+        component:  () => import("@/views/ManagerView.vue")
       },
       {
         path: "movies",
         name: "movies",
         component: () => import("@/views/MovieView.vue")
+      },
+      {
+        path: "graph",
+        name: "graph",
+        component: () => import("@/views/FriendGraph.vue")
       }
     ]
   }
