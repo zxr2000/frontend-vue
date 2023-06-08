@@ -5,6 +5,7 @@
       <div class="movie-item" v-for="(item, index) in recommendMovies" :key="index">
         <img :src="imgUrl" alt="已评分电影" loading="lazy">
         <div class="movie-itemTitle">{{ item.title }}</div>
+        <div class="movie-itemRating">个性化推荐得分：{{item.rating}}</div>
       </div>
     </div>
   </div>

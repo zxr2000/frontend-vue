@@ -18,7 +18,7 @@
                         class="menu" router>
                         <el-menu-item index="/home/my">
                             <el-icon><User /></el-icon>
-                            <span>关于我的</span>
+                            <span>已评分电影</span>
                         </el-menu-item>
                         <el-menu-item index="/home/movies">
                             <el-icon><View /></el-icon>
