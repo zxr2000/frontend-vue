@@ -12,15 +12,15 @@ import axios from "axios";
 console.log(window.localStorage.getItem("userId"))
 //import echarts from "echarts";
 import * as echarts from 'echarts/core';
-//引入基本模板
-let echarts = require("echarts/lib/echarts");
-
-//引入图形类型
-require("echarts/lib/chart/graph");
-
-//引入使用组件title、tooltip等
-require("echarts/lib/component/title");
-require("echarts/lib/component/tooltip");
+// //引入基本模板
+// let echarts = require("echarts/lib/echarts");
+//
+// //引入图形类型
+// require("echarts/lib/chart/graph");
+//
+// //引入使用组件title、tooltip等
+// require("echarts/lib/component/title");
+// require("echarts/lib/component/tooltip");
 
 export default {
   name: 'FriendGraph',
@@ -42,8 +42,6 @@ export default {
             userId: window.localStorage.getItem("userId")
           }
         }).then(res=>{
-          //this.graph_data.data = res.data.data.username;
-          //this.graph_data.link =res.data.data.similarity;
           this.graph_data=res.data.data;
           this.initChart();
           //console.log(this.graph_data);
@@ -57,6 +55,13 @@ export default {
           title: {
             text: "朋友关系",
           },
+          legend: [
+            {
+              // selectedMode: 'single',
+              data: this.graph_data.name,
+              links:this.graph_data.similarity
+            }
+          ],
           tooltip: {}, //提示框
           animationDurationUpdate: 1500,
           animationEasingUpdate: "quinticInOut",
@@ -90,8 +95,8 @@ export default {
                 repulsion: 200,
                 edgeLength: 120,
               },
-              data: graph.nodes,
-              links: graph.links,
+              // data: graph.nodes,
+              // links: graph.links,
               lineStyle: {
                 opacity: 0.9,
                 width: 2,
