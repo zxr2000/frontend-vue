@@ -3,7 +3,7 @@
         <el-container>
             <el-header class="movie-header">
                 <div class="logo-containr">
-                    <span>电影推荐系统</span>
+                    <span>一枝花电影推荐系统</span>
                 </div>
                 <div class="user-container">
                     <div class="user">
@@ -69,7 +69,7 @@ function logout() {
     justify-content: space-between;
     align-items: center;
     color: #fff;
-    
+
 }
 .logo-containr {
     font-size: 18px;
@@ -79,7 +79,7 @@ function logout() {
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-}   
+}
 
 .user-container {
     font-size: 16px;
