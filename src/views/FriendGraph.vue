@@ -7,12 +7,20 @@
 </template>
 
 <script>
-import RelationGraph from 'relation-graph/vue3'
+
 import axios from "axios";
 console.log(window.localStorage.getItem("userId"))
 //import echarts from "echarts";
- import * as echarts from 'echarts/core';
+import * as echarts from 'echarts/core';
+//引入基本模板
+let echarts = require("echarts/lib/echarts");
 
+//引入图形类型
+require("echarts/lib/chart/graph");
+
+//引入使用组件title、tooltip等
+require("echarts/lib/component/title");
+require("echarts/lib/component/tooltip");
 
 export default {
   name: 'FriendGraph',
@@ -82,8 +90,8 @@ export default {
                 repulsion: 200,
                 edgeLength: 120,
               },
-              graph_data: [],
-              links: [],
+              data: graph.nodes,
+              links: graph.links,
               lineStyle: {
                 opacity: 0.9,
                 width: 2,
@@ -97,6 +105,8 @@ export default {
       },
   }
 };
+
+
 </script>
 
 <style >
