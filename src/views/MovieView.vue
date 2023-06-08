@@ -2,15 +2,16 @@
     <div class="movie-container">
         <h1>电影总览</h1>
         <div class="allMovie-container">
-            <el-tooltip 
-                v-for="(item, index) in movies" 
-                effect="dark" 
-                content="点击进行电影评分" 
+            <el-tooltip
+                v-for="(item, index) in movies"
+                effect="dark"
+                content="点击进行电影评分"
                 placement="top-start"
                 :key="index">
                 <div class="movie-item"   @click = "() => rateMovie(item)">
                     <img :src="image" alt="电影" loading="lazy">
                     <div class="movie-itemTitle">{{ item.title }}</div>
+                    <div class="movie-itemRating">{{item.avg}}</div>
                 </div>
             </el-tooltip>
         </div>
@@ -21,9 +22,9 @@
             <div>电影名：{{ movieInfo.title }}</div>
             <div>公映日期：{{ movieInfo.date }}</div>
             <el-button type="success" round @click="setScore(0)" size="small" class="btn">评为0分</el-button>
-            <el-rate v-model="score" 
-                :texts="['烂片', '较差片', '普通', '佳作', '影史经典']" 
-                show-text 
+            <el-rate v-model="score"
+                :texts="['烂片', '较差片', '普通', '佳作', '影史经典']"
+                show-text
                 @change="setScore"
                 size="large"
             />
@@ -131,7 +132,23 @@ img {
     border-radius: 5px;
     width: 80%;
 }
-
+.movie-itemRating {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 5px;
+  width: 80%;
+}
 .movie-item:hover {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }

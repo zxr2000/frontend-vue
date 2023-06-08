@@ -5,8 +5,8 @@
       <el-form-item label="Username" style="width: 400px">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="Password" style="width: 400px">
-        <el-input v-model="form.password"></el-input>
+      <el-form-item placeholder="请输入密码" label="Password" style="width: 400px">
+        <el-input v-model="form.password" show-password></el-input>
       </el-form-item>
       <el-form-item style="width: 400px;">
         <el-button type="primary" @click="onSubmit">Login</el-button>
