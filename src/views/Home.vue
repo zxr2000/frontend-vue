@@ -28,13 +28,13 @@
                             <el-icon><HelpFilled /></el-icon>
                             <span>电影推荐</span>
                         </el-menu-item>
-                        <el-menu-item index="/home/friend">
-                            <el-icon><UserFilled /></el-icon>
-                            <span>我的好友(列表展示)</span>
-                        </el-menu-item>
+<!--                        <el-menu-item index="/home/friend">-->
+<!--                            <el-icon><UserFilled /></el-icon>-->
+<!--                            <span>我的好友(列表展示)</span>-->
+<!--                        </el-menu-item>-->
                         <el-menu-item index="/home/graph">
                             <el-icon><User /></el-icon>
-                            <span>我的好友(关系图展示)</span>
+                            <span>我的好友</span>
                         </el-menu-item>
                         <el-menu-item index="/home/manager" :disabled="disabled">
                             <el-icon><Tools /></el-icon>

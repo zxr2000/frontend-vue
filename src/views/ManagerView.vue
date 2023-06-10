@@ -20,12 +20,12 @@
       </el-table-column>
     </el-table>
     <div class="pagination">
-      <el-pagination 
-        @current-change="handleCurrentChange" 
+      <el-pagination
+        @current-change="handleCurrentChange"
         :current-page="currentPage"
-        layout="prev, pager, next" 
+        layout="prev, pager, next"
         :total="total"
-        background 
+        background
         >
       </el-pagination>
     </div>

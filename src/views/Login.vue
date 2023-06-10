@@ -96,8 +96,8 @@ export default {
     },
     addItem() {
       const data = new FormData();
-      data.append("username", window.localStorage.getItem("username"))
-      data.append("password", window.localStorage.getItem("password"))
+      //data.append("username", window.localStorage.getItem("username"))
+      //data.append("password", window.localStorage.getItem("password"))
       data.append("createUsername", this.form1.username)
       data.append("createPassword", this.form1.password)
       data.append("createAge", this.form1.age)
@@ -105,7 +105,7 @@ export default {
       data.append("createOccupation", this.form1.occupation)
       axios.post("http://localhost:8888/api/user/create", data).then(res => {
         console.log(res);
-        if (res.data.status === "FAILURE" || res.data.status === "UNAUTHORIZED") {
+        if (res.data.status === "FAILURE" ) {
           ElMessage({
             message: res.data.data,
             type: "error"

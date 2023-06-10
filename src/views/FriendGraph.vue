@@ -1,13 +1,45 @@
 <template>
   <div class="graph-container">
-    <div class="echarts-container" ref="container"></div>
+    <div class="friendship-title">
+      <span>展示好友/新增关注</span>
+    </div>
+    <el-dialog v-model="dialogTableVisible" title="陌生人列表">
+      <el-table :data="strangerList" stripe style="width: 100%">
+        <el-table-column prop="username" label="用户名" width="180" />
+        <el-table-column prop="age" label="年龄" width="180" />
+        <el-table-column prop="gender" label="性别" />
+        <el-table-column fixed="right" label="Operations" width="120">
+          <template #default="scope">
+            <el-button link type="success" @click="followStranger(scope.row.username)">点击关注</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+
+
+    <div style="display: flex">
+      <div class="echarts-container" ref="container"></div>
+<!--      <div class="strangership-title">-->
+<!--        <span>新增关注</span>-->
+<!--      </div>-->
+  <el-popover placement="top-start" title="陌生人列表" :width="200" trigger="hover" content="点击查看陌生人列表以便进行及时的关注">
+    <template #reference>
+      <el-icon class="add" @click="showList">
+        <Plus />
+      </el-icon>
+    </template>
+  </el-popover>
+    </div>
   </div>
 </template>
 <script setup>
 import axios from "axios";
 import { ref, onMounted } from "vue"
 import * as echarts from 'echarts';
-
+import { ElMessage } from "element-plus";
+const dialogTableVisible = ref(false);
+const strangerList = ref([]);
+console.log(window.localStorage.getItem("userId"))
 let container = ref(null)
 let friendList = null
 let data = []
@@ -106,6 +138,42 @@ async function getFriend() {
   console.log(myChart)
   myChart && myChart.setOption(option)
 }
+function showList() {
+  dialogTableVisible.value = true;
+  //TODO 发生请求获取所有的陌生用户
+  axios.get("http://localhost:8888/api/friendship/getAllStranger", {
+    params: {
+      userId: window.localStorage.getItem("userId")
+    }
+  }).then(res => {
+    console.log(res.data.data);
+    strangerList.value = res.data.data;
+  })
+
+}
+function followStranger(username) {
+  axios.get("http://localhost:8888/api/friendship/addFriend", {
+    params: {
+      userId: window.localStorage.getItem("userId"),
+      friendName: username
+    }
+  }).then(res => {
+    if (res.data.status === "SUCCESS") {
+      ElMessage({
+        type: "success",
+        message: "关注用户成功"
+      })
+      dialogTableVisible.value = false;
+    } else {
+      ElMessage({
+        type: "error",
+        message: "关注用户失败"
+      })
+    }
+    // 重新加载好友列表
+    getFriend();
+  })
+}
 
 getFriend();
 
@@ -121,9 +189,37 @@ onMounted(() => {
 .graph-container {
   width: 100%;
 }
-
+.add {
+  cursor: pointer;
+}
 .echarts-container {
   height: calc(100vh - 60px);
   width: 100%;
 }
+ul {
+  list-style: none;
+
+}
+.friendship-title {
+  margin: 10px auto;
+  text-align: center;
+  font-size: 23px;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: #000;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 5px;
+}
+/*.strangership-title {*/
+/*  margin: 10px auto;*/
+/*  text-align:right;*/
+/*  font-size: 15px;*/
+/*  width: 100%;*/
+/*  background-color: #ffffff;*/
+/*  color: rgb(116, 116, 246);*/
+/*  font-weight: 600;*/
+/*  padding: 10px;*/
+/*  border-radius: 5px;*/
+/*}*/
 </style>

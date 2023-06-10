@@ -46,7 +46,7 @@ h1 {
   border-radius: 10px;
   max-width: 190px;
   height: 300px;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-left: 10px;
   transition: all .5s ease;
   border-radius: 10px;
@@ -71,7 +71,7 @@ img  {
   color: #fff;
 }
 .movie-itemRating{
-  position: absolute;
+  position: relative;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
