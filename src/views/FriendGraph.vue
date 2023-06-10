@@ -1,119 +1,117 @@
 <template>
-  <div>
-    <div id="graph-chart">
-      <div id="main-chart" style="width:100%;height: 100%"></div>
-    </div>
+  <div class="graph-container">
+    <div class="echarts-container" ref="container"></div>
   </div>
 </template>
-
-<script>
-
+<script setup>
 import axios from "axios";
-console.log(window.localStorage.getItem("userId"))
-//import echarts from "echarts";
-import * as echarts from 'echarts/core';
-// //引入基本模板
-// let echarts = require("echarts/lib/echarts");
-//
-// //引入图形类型
-// require("echarts/lib/chart/graph");
-//
-// //引入使用组件title、tooltip等
-// require("echarts/lib/component/title");
-// require("echarts/lib/component/tooltip");
+import { ref, onMounted } from "vue"
+import * as echarts from 'echarts';
 
-export default {
-  name: 'FriendGraph',
-  data() {
-    return {
-      graph_data:{}
+let container = ref(null)
+let friendList = null
+let data = []
+let links = []
+let option = null
+let myChart = null;
+async function getFriend() {
+  const res = await axios.get("http://localhost:8888/api/friendship/getAll", {
+    params: {
+      userId: window.localStorage.getItem("userId")
     }
-  },
-  mounted() {
-    this.fetchData();
-  },
-  created() {
-  },
+  })
 
-  methods: {
-    fetchData(){
-        axios.get("http://localhost:8888/api/friendship/getAll", {
-          params: {
-            userId: window.localStorage.getItem("userId")
-          }
-        }).then(res=>{
-          this.graph_data=res.data.data;
-          this.initChart();
-          //console.log(this.graph_data);
-      }).catch((err)=>{
-        console.log(err);
-      });
-      },
-      initChart(){
-        let myChart=echarts.init(document.getElementById("main-chart"));
-        let option={
-          title: {
-            text: "朋友关系",
-          },
-          legend: [
-            {
-              // selectedMode: 'single',
-              data: this.graph_data.name,
-              links:this.graph_data.similarity
-            }
-          ],
-          tooltip: {}, //提示框
-          animationDurationUpdate: 1500,
-          animationEasingUpdate: "quinticInOut",
-          series: [
-            {
-              type: "graph",
-              layout: "force",
-              // symbolSize: 50, //倘若该属性不在link里，则其表示节点的大小；否则即为线两端标记的大小
-              symbolSize: (value, params) => {
-                switch (params.data.category) {
-                  case 0:
-                    return 100;
-                    break;
-                  case 1:
-                    return 50;
-                    break;
-                }
-              },
-              roam: true, //鼠标缩放功能
-              label: {
-                show: true, //是否显示标签
-              },
-              focusNodeAdjacency: true, //鼠标移到节点上时突出显示结点以及邻节点和边
-              edgeSymbol: ["none", "arrow"], //关系两边的展现形式，也即图中线两端的展现形式。arrow为箭头
-              edgeSymbolSize: [4, 10],
-              draggable: true,
-              edgeLabel: {
-                fontSize: 20, //关系（也即线）上的标签字体大小
-              },
-              force: {
-                repulsion: 200,
-                edgeLength: 120,
-              },
-              // data: graph.nodes,
-              // links: graph.links,
-              lineStyle: {
-                opacity: 0.9,
-                width: 2,
-                curveness: 0,
-              },
+  friendList = res.data.data;
+  data = friendList.map(item => {
+    return {
+      name: item.username
+    }
+  })
+  data.push({
+    name: window.localStorage.getItem("username"),
+    x: 300,
+    y: 300
+  })
+
+  links = friendList.map(item => {
+    return {
+      source: window.localStorage.getItem("username"),
+      target: item.username
+    }
+  })
+
+  option = {
+    title: {
+      text: `用户${window.localStorage.getItem("username")}的好友图谱`
+    },
+    tooltip: {},
+
+    series: [
+      {
+        type: "graph", // 类型:关系图
+        layout: "force", //图的布局，类型为力导图
+        symbolSize: 40, // 调整节点的大小
+        roam: true, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移,可以设置成 'scale' 或者 'move'。设置成 true 为都开启
+        edgeSymbol: ["circle", "arrow"],
+        edgeSymbolSize: [2, 10],
+        edgeLabel: {
+          normal: {
+            textStyle: {
+              fontSize: 20,
             },
-          ],
-        };
-        myChart.resize();
-        myChart.setOption(option);
-      },
+          },
+        },
+        force: {
+          repulsion: 2500,
+          edgeLength: [10, 500],
+        },
+        draggable: true,
+        lineStyle: {
+          normal: {
+            width: 2,
+            color: "#4b565b",
+          },
+        },
+        label: {
+          show: true
+        },
+        edgeSymbol: ['circle', 'arrow'],
+        edgeSymbolSize: [4, 10],
+        edgeLabel: {
+          fontSize: 20
+        },
+        data,
+        links,
+        lineStyle: {
+          opacity: 0.9,
+          width: 2,
+          curveness: 0
+        }
+      }
+    ]
   }
-};
 
+  console.log(myChart)
+  myChart && myChart.setOption(option)
+}
 
+getFriend();
+
+onMounted(() => {
+
+  myChart = echarts.init(container.value);
+  console.log(option)
+  option && myChart.setOption(option)
+})
 </script>
 
-<style >
+<style>
+.graph-container {
+  width: 100%;
+}
 
+.echarts-container {
+  height: calc(100vh - 60px);
+  width: 100%;
+}
 </style>
