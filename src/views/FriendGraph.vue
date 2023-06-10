@@ -22,9 +22,10 @@ async function getFriend() {
   })
 
   friendList = res.data.data;
+  console.log(friendList)
   data = friendList.map(item => {
     return {
-      name: item.username
+      name: item.friendName
     }
   })
   data.push({
@@ -36,7 +37,14 @@ async function getFriend() {
   links = friendList.map(item => {
     return {
       source: window.localStorage.getItem("username"),
-      target: item.username
+      target: item.friendName,
+      category: item.relation,
+      label: {
+        normal: {
+          show: true,
+          formatter: `相似度：${item.relation}`
+        }
+      }
     }
   })
 
@@ -54,12 +62,16 @@ async function getFriend() {
         roam: true, // 是否开启鼠标缩放和平移漫游。默认不开启。如果只想要开启缩放或者平移,可以设置成 'scale' 或者 'move'。设置成 true 为都开启
         edgeSymbol: ["circle", "arrow"],
         edgeSymbolSize: [2, 10],
-        edgeLabel: {
+        edgeLabel: {                // 连接两个关系对象的线上的标签
           normal: {
+            show: true,
             textStyle: {
-              fontSize: 20,
+              fontSize: 14
             },
-          },
+            formatter: function (param) {        // 标签内容
+              return param.data.category;
+            }
+          }
         },
         force: {
           repulsion: 2500,
