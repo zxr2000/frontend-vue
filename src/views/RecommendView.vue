@@ -56,7 +56,7 @@ h1 {
   border-radius: 10px;
   max-width: 190px;
   height: 300px;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-left: 10px;
   transition: all .5s ease;
   cursor: pointer;
@@ -79,6 +79,17 @@ img  {
   background-color: rgba(0,0,0,0.5);
   color: #fff;
 }
+/*.movie-itemRating {*/
+/*  position: relative;*/
+/*  bottom: 10px;*/
+/*  left: 50%;*/
+/*  transform: translateX(-50%);*/
+/*  text-align: center;*/
+/*  font-weight: 600;*/
+/*  background-color: rgba(0,0,0,0.5);*/
+/*  color: #fff;*/
+/*}*/
+
 </style>
 
 

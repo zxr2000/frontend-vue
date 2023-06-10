@@ -11,7 +11,7 @@
                 <div class="movie-item"   @click = "() => rateMovie(item)">
                     <img :src="image" alt="电影" loading="lazy">
                     <div class="movie-itemTitle">{{ item.title }}</div>
-                    <div class="movie-itemRating">{{item.avg}}</div>
+                    <div class="movie-itemRating">平均得分:{{item.avg}}</div>
                 </div>
             </el-tooltip>
         </div>
@@ -103,7 +103,7 @@ h1 {
     border-radius: 10px;
     width: 190px;
     height: 300px;
-    margin-top: 20px;
+    margin-top: 40px;
     margin-left: 10px;
     transition: all .5s ease;
     border-radius: 10px;
@@ -116,39 +116,25 @@ img {
 }
 
 .movie-itemTitle {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
-    font-size: 16px;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    box-sizing: border-box;
-    padding: 5px;
-    border-radius: 5px;
-    width: 80%;
-}
-.movie-itemRating {
   position: absolute;
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
-  font-size: 16px;
-  background-color: rgba(0, 0, 0, 0.5);
+  font-weight: 600;
+  background-color: rgba(0,0,0,0.5);
   color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  box-sizing: border-box;
-  padding: 5px;
-  border-radius: 5px;
-  width: 80%;
 }
+/*.movie-itemRating {*/
+/*  position: absolute;*/
+/*  bottom: 10px;*/
+/*  left: 50%;*/
+/*  transform: translateX(-50%);*/
+/*  text-align: center;*/
+/*  font-weight: 600;*/
+/*  background-color: rgba(0,0,0,0.5);*/
+/*  color: #fff;*/
+/*}*/
 .movie-item:hover {
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
