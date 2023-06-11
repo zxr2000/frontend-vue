@@ -3,7 +3,8 @@
     <h1>电影推荐</h1>
     <div class="recommendMovies-container" v-loading="loading">
       <div class="movie-item" v-for="(item, index) in recommendMovies" :key="index">
-        <img :src="imgUrl" alt="已评分电影" loading="lazy">
+        <img :src="require(`../assets/poster${index+20}.png`)" v-if="index<10" alt="电影" loading="lazy">
+        <img :src="imgUrl" v-if="index>9" alt="已评分电影" loading="lazy">
         <div class="movie-itemTitle">{{ item.title }}</div>
         <div class="movie-itemRating">个性化推荐得分：{{item.rating}}</div>
       </div>

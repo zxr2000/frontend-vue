@@ -9,7 +9,8 @@
                 placement="top-start"
                 :key="index">
                 <div class="movie-item"   @click = "() => rateMovie(item)">
-                    <img :src="image" alt="电影" loading="lazy">
+                    <img :src="require(`../assets/poster${index+10}.png`)" v-if="index<10" alt="电影" loading="lazy">
+                    <img :src="image" v-if="index>9" alt="电影" loading="lazy">
                     <div class="movie-itemTitle">{{ item.title }}</div>
                     <div class="movie-itemRating">平均得分:{{item.avg}}</div>
                 </div>
