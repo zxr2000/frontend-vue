@@ -37,7 +37,7 @@
 
   </div>
 
-  <el-dialog v-model="showSameMovies" :title="`我和${friendName}共同喜爱的电影`">
+  <el-dialog v-model="showSameMovies" :title="`我和${friendName}共同已观看的电影`">
     <el-table :data="sameMovies" stripe style="width: 100%">
       <el-table-column prop="title" label="电影名" width="180" />
       <el-table-column prop="date" label="出版日期" width="180" />
