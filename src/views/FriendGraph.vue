@@ -1,7 +1,6 @@
 <template>
   <div class="graph-container">
     <div class="echarts-container" ref="container"></div>
-
   </div>
   <div class="friendship-container">
     <el-dialog v-model="dialogTableVisible" title="陌生人列表">
@@ -152,8 +151,6 @@ async function getFriend() {
       }
     ]
   }
-
-  console.log(myChart)
   myChart && myChart.setOption(option)
   myChart.on('click', function (param) {
     if (param.dataType == 'node') {
