@@ -11,7 +11,8 @@
       <el-table-column prop="id" label="id" />
       <el-table-column prop="username" label="username" />
       <el-table-column prop="gender" label="gender" />
-      <el-table-column prop="password" label="password" />
+<!--      <el-table-column prop="password" label="password" />-->
+      <el-table-column label="password">******</el-table-column>
       <el-table-column prop="type" label="type" />
       <el-table-column fixed="right" label="Operations" width="120">
         <template #default="scope">
