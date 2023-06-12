@@ -1,8 +1,9 @@
 <template>
   <div class="graph-container">
-    <div class="friendship-title">
-      <span>展示好友/新增关注</span>
-    </div>
+    <div class="echarts-container" ref="container"></div>
+
+  </div>
+  <div class="friendship-container">
     <el-dialog v-model="dialogTableVisible" title="陌生人列表">
       <el-table :data="strangerList" stripe style="width: 100%">
         <el-table-column prop="username" label="用户名" width="180" />
@@ -15,22 +16,34 @@
         </el-table-column>
       </el-table>
     </el-dialog>
-
-
-    <div style="display: flex">
-      <div class="echarts-container" ref="container"></div>
-<!--      <div class="strangership-title">-->
-<!--        <span>新增关注</span>-->
-<!--      </div>-->
-  <el-popover placement="top-start" title="陌生人列表" :width="200" trigger="hover" content="点击查看陌生人列表以便进行及时的关注">
-    <template #reference>
-      <el-icon class="add" @click="showList">
-        <Plus />
-      </el-icon>
-    </template>
-  </el-popover>
+    <div class="friendship-title">
+      <span>好友/关注列表</span>
     </div>
+    <el-empty v-if="friends.length === 0" description="该用户没有好友" />
+    <div v-else>
+      <el-popover placement="top-start" title="陌生人列表" :width="200" trigger="hover" content="点击查看陌生人列表以便进行及时的关注">
+        <template #reference>
+          <el-icon class="add" @click="showList">
+            <Plus />
+          </el-icon>
+        </template>
+      </el-popover>
+      <el-table :data="friends" stripe style="width: 100%">
+        <el-table-column prop="friendId" label="好友ID" width="180" />
+        <el-table-column prop="friendName" label="好友昵称" width="180" />
+        <el-table-column prop="relation" label="相似度" />
+      </el-table>
+    </div>
+
   </div>
+
+  <el-dialog v-model="showSameMovies" :title="`我和${friendName}共同喜爱的电影`">
+    <el-table :data="sameMovies" stripe style="width: 100%">
+      <el-table-column prop="title" label="电影名" width="180" />
+      <el-table-column prop="date" label="出版日期" width="180" />
+      <el-table-column prop="avg" label="平均得分" />
+    </el-table>
+  </el-dialog>
 </template>
 <script setup>
 import axios from "axios";
@@ -39,9 +52,12 @@ import * as echarts from 'echarts';
 import { ElMessage } from "element-plus";
 const dialogTableVisible = ref(false);
 const strangerList = ref([]);
-console.log(window.localStorage.getItem("userId"))
+const friends = ref([])
+const sameMovies = ref([]);
+const showSameMovies = ref(false)
+const friendName = ref(null);
 let container = ref(null)
-let friendList = null
+let friendList = []
 let data = []
 let links = []
 let option = null
@@ -52,6 +68,8 @@ async function getFriend() {
       userId: window.localStorage.getItem("userId")
     }
   })
+
+  friends.value = res.data.data;
 
   friendList = res.data.data;
   console.log(friendList)
@@ -74,7 +92,7 @@ async function getFriend() {
       label: {
         normal: {
           show: true,
-          formatter: `相似度：${item.relation}`
+          formatter: "点击展示共同电影"
         }
       }
     }
@@ -137,7 +155,30 @@ async function getFriend() {
 
   console.log(myChart)
   myChart && myChart.setOption(option)
+  myChart.on('click', function (param) {
+    if (param.dataType == 'node') {
+      console.log('点击了节点', param)
+    } else {
+      let target = param.data.target;
+      friendName.value = target;
+      axios.get("http://localhost:8888/api/movie/getSameMovie", {
+        params: {
+          userId: window.localStorage.getItem("userId"),
+          friendId: friendList.filter((item) => {
+            return item.friendName === target;
+          }).map(item => {
+            return item.friendId
+          })[0]
+        }
+      }).then(res => {
+        console.log(res.data.data);
+        sameMovies.value = res.data.data;
+        showSameMovies.value = true;
+      })
+    }
+  })
 }
+
 function showList() {
   dialogTableVisible.value = true;
   //TODO 发生请求获取所有的陌生用户
@@ -149,8 +190,8 @@ function showList() {
     console.log(res.data.data);
     strangerList.value = res.data.data;
   })
-
 }
+
 function followStranger(username) {
   axios.get("http://localhost:8888/api/friendship/addFriend", {
     params: {
@@ -185,21 +226,25 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 .graph-container {
   width: 100%;
 }
+
 .add {
   cursor: pointer;
 }
+
 .echarts-container {
   height: calc(100vh - 60px);
   width: 100%;
 }
+
 ul {
   list-style: none;
 
 }
+
 .friendship-title {
   margin: 10px auto;
   text-align: center;
@@ -211,15 +256,4 @@ ul {
   padding: 10px;
   border-radius: 5px;
 }
-/*.strangership-title {*/
-/*  margin: 10px auto;*/
-/*  text-align:right;*/
-/*  font-size: 15px;*/
-/*  width: 100%;*/
-/*  background-color: #ffffff;*/
-/*  color: rgb(116, 116, 246);*/
-/*  font-weight: 600;*/
-/*  padding: 10px;*/
-/*  border-radius: 5px;*/
-/*}*/
 </style>
