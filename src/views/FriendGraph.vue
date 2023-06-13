@@ -31,6 +31,11 @@
         <el-table-column prop="friendId" label="好友ID" width="180" />
         <el-table-column prop="friendName" label="好友昵称" width="180" />
         <el-table-column prop="relation" label="相似度" />
+        <el-table-column fixed="right" label="Operations" width="120">
+          <template #default="scope">
+            <el-button link type="primary" size="small" @click.prevent="deleteItem(scope.row.friendName)">删除</el-button>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
 
@@ -173,6 +178,28 @@ async function getFriend() {
         showSameMovies.value = true;
       })
     }
+  })
+}
+function deleteItem(friendName){
+  axios.get("http://121.43.110.55:8888/api/friendship/deleteFriend", {
+    params: {
+      userId: window.localStorage.getItem("userId"),
+      friendName: friendName
+    }
+  }).then(res => {
+    console.log(res)
+    if (res.data.status === "SUCCESS") {
+      ElMessage({
+        type: "success",
+        message: "删除朋友成功"
+      })
+    } else {
+      ElMessage({
+        type: "error",
+        message: res.msg
+      })
+    }
+    getFriend();  // 删除之后重新加载朋友数据
   })
 }
 
