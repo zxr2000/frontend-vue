@@ -12,14 +12,9 @@
     "core-js": "^3.8.3",
     "echarts": "^5.4.2",
     "element-plus": "^2.3.5",
-    "element-ui": "^2.15.13",
-    "js-cookie": "^3.0.5",
-    "qs": "^6.11.2",
-    "relation-graph": "^2.0.26",
     "vue": "^3.2.13",
     "vue-router": "^4.0.3",
-    "vuex": "^4.0.0",
-    "wangeditor": "^4.7.15"
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~5.0.0",
