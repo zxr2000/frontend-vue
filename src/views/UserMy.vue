@@ -15,7 +15,7 @@ import axios from "axios";
 import {ref, reactive } from "vue";
 import imgUrl from "@/assets/movie.jpg"
 const movies = ref([])
-axios.get("http://localhost:8888/api/rating/getByUser", {
+axios.get("http://121.43.110.55:8888/api/rating/getByUser", {
   params: {
     userId: window.localStorage.getItem("userId")
   }

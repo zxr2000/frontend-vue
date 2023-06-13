@@ -99,7 +99,7 @@ export default {
     },
 
     searchUsename() {
-      axios.get("http://localhost:8888/api/user/getUser", {
+      axios.get("http://121.43.110.55:8888/api/user/getUser", {
         params: {
           username: this.search
         }
@@ -110,7 +110,7 @@ export default {
     },
 
     load() {
-      axios.get("http://localhost:8888/api/user/getAll", {
+      axios.get("http://121.43.110.55:8888/api/user/getAll", {
         params: {
           userId: window.localStorage.getItem("userId"),
         }
@@ -129,7 +129,7 @@ export default {
       data.append("createAge", this.form.age)
       data.append("createGender", this.form.gender)
       data.append("createOccupation", this.form.occupation)
-      axios.post("http://localhost:8888/api/user/create", data).then(res => {
+      axios.post("http://121.43.110.55:8888/api/user/create", data).then(res => {
         console.log(res);
         if (res.data.status === "FAILURE" || res.data.status === "UNAUTHORIZED") {
           ElMessage({
@@ -152,7 +152,7 @@ export default {
       data.append("password", window.localStorage.getItem("password"));
       data.append("deleteId", userID);
       console.log("开始执行删除", userID)
-      axios.post("http://localhost:8888/api/user/delete", data).then(res => {
+      axios.post("http://121.43.110.55:8888/api/user/delete", data).then(res => {
         console.log(res)
         if (res.data.status === "SUCCESS") {
           ElMessage({

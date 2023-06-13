@@ -62,7 +62,7 @@ let links = []
 let option = null
 let myChart = null;
 async function getFriend() {
-  const res = await axios.get("http://localhost:8888/api/friendship/getAll", {
+  const res = await axios.get("http://121.43.110.55:8888/api/friendship/getAll", {
     params: {
       userId: window.localStorage.getItem("userId")
     }
@@ -158,7 +158,7 @@ async function getFriend() {
     } else {
       let target = param.data.target;
       friendName.value = target;
-      axios.get("http://localhost:8888/api/movie/getSameMovie", {
+      axios.get("http://121.43.110.55:8888/api/movie/getSameMovie", {
         params: {
           userId: window.localStorage.getItem("userId"),
           friendId: friendList.filter((item) => {
@@ -179,7 +179,7 @@ async function getFriend() {
 function showList() {
   dialogTableVisible.value = true;
   //TODO 发生请求获取所有的陌生用户
-  axios.get("http://localhost:8888/api/friendship/getAllStranger", {
+  axios.get("http://121.43.110.55:8888/api/friendship/getAllStranger", {
     params: {
       userId: window.localStorage.getItem("userId")
     }
@@ -190,7 +190,7 @@ function showList() {
 }
 
 function followStranger(username) {
-  axios.get("http://localhost:8888/api/friendship/addFriend", {
+  axios.get("http://121.43.110.55:8888/api/friendship/addFriend", {
     params: {
       userId: window.localStorage.getItem("userId"),
       friendName: username

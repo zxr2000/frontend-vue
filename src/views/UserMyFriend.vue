@@ -48,7 +48,7 @@ const strangerList = ref([]);
 console.log(window.localStorage.getItem("userId"))
 
 function loadFriends() {
-  axios.get("http://localhost:8888/api/friendship/getAll", {
+  axios.get("http://121.43.110.55:8888/api/friendship/getAll", {
     params: {
       userId: window.localStorage.getItem("userId")
     }
@@ -61,7 +61,7 @@ function loadFriends() {
 function showList() {
   dialogTableVisible.value = true;
   //TODO 发生请求获取所有的陌生用户
-  axios.get("http://localhost:8888/api/friendship/getAllStranger", {
+  axios.get("http://121.43.110.55:8888/api/friendship/getAllStranger", {
     params: {
       userId: window.localStorage.getItem("userId")
     }
@@ -72,7 +72,7 @@ function showList() {
 
 }
 function followStranger(username) {
-  axios.get("http://localhost:8888/api/friendship/addFriend", {
+  axios.get("http://121.43.110.55:8888/api/friendship/addFriend", {
     params: {
       userId: window.localStorage.getItem("userId"),
       friendName: username

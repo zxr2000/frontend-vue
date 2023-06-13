@@ -67,7 +67,7 @@ export default {
       const username = this.form.name;
       const password = this.form.password;
       // 发送登录请求给后台 API
-      axios.post('http://localhost:8888/api/user/login', {
+      axios.post('http://121.43.110.55:8888/api/user/login', {
         username: username,
         password: password
       }).then((response) => {
@@ -103,7 +103,7 @@ export default {
       data.append("createAge", this.form1.age)
       data.append("createGender", this.form1.gender)
       data.append("createOccupation", this.form1.occupation)
-      axios.post("http://localhost:8888/api/user/create", data).then(res => {
+      axios.post("http://121.43.110.55:8888/api/user/create", data).then(res => {
         console.log(res);
         if (res.data.status === "FAILURE" ) {
           ElMessage({

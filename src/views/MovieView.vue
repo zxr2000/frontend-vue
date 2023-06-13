@@ -37,7 +37,7 @@ const movieInfo = reactive({
   movieId: ""
 })
 
-axios.get("http://localhost:8888/api/movie/getAll").then((res) => {
+axios.get("http://121.43.110.55:8888/api/movie/getAll").then((res) => {
   movies.value = res.data.data;
 })
 
@@ -57,7 +57,7 @@ function setScore(score) {
   data.append("movieId", movieInfo.movieId)
   data.append("title", movieInfo.title)
   data.append("rating", String(score))
-  axios.post("http://localhost:8888/api/rating/addRating", data).then(res => {
+  axios.post("http://121.43.110.55:8888/api/rating/addRating", data).then(res => {
     console.log(res);
     dialogVisible.value = false;
     ElMessage({

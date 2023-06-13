@@ -20,7 +20,7 @@ import imgUrl from "@/assets/SAO.jpg"
 const loading = ref(true)
 const recommendMovies = ref([]);
 function loadMovies() {
-  axios.get("http://localhost:8888/api/movie/getRecommend", {
+  axios.get("http://121.43.110.55:8888/api/movie/getRecommend", {
     params: {
       userId: window.localStorage.getItem("userId")
     }
